@@ -1,36 +1,36 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import { userRoutes } from './users/users.js'
 
 const port = 8000
 const app = express()
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   console.log('custom')
   next()
 })
 
-app.use('/', (req, res, next) => {
+app.use('/', (req: Request, res: Response, next: NextFunction) => {
   console.log('only /')
   next()
 })
 
 // all middleware
-app.all('/', (req, res, next) => {
+app.all('/', (req: Request, res: Response, next: NextFunction) => {
   console.log('PARAMS: ', req.params)
   next()
 })
 
 let world = false
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json({ hello: true, world })
 })
 
-app.get('/error', (req, res) => {
+app.get('/error', (req: Request, res: Response) => {
   throw new Error('error!!!')
 })
 
-app.post('/', (req, res) => {
+app.post('/', (req: Request, res: Response) => {
   world = !world
   res.send(200)
 })
@@ -38,7 +38,7 @@ app.post('/', (req, res) => {
 app.use('/users', userRoutes)
 
 // handle errors
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err.message)
   res.status(500).send(err.message)
 })

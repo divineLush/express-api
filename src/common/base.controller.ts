@@ -3,11 +3,9 @@ import { Router, Response } from 'express'
 import { IControllerRoute } from "./route.interface"
 
 export abstract class BaseController {
-  public readonly router: Router
+  public readonly router: Router = Router()
 
-  constructor (private logger: LoggerService) {
-    this.router = Router()
-  }
+  constructor (private logger: LoggerService) {}
 
   ok<T>(res: Response, message: T) {
     return this.send<T>(res, 200, message)

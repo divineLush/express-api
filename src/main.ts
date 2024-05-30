@@ -1,8 +1,8 @@
 import { App } from './app'
 import { LoggerService } from './logger/logger.service'
+import { UserController } from './users/users.controller'
 
 (async () => {
-  const app = new App(new LoggerService())
-
-  await app.init()
+  const logger = new LoggerService()
+  new App(logger, new UserController(logger))
 })()

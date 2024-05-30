@@ -3,7 +3,7 @@ import { Router, Response } from 'express'
 import { IControllerRoute } from "./route.interface"
 
 export abstract class BaseController {
-  private readonly router: Router
+  public readonly router: Router
 
   constructor (private logger: LoggerService) {
     this.router = Router()

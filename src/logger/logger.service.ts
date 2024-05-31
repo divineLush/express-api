@@ -1,7 +1,8 @@
 import { Logger, ILogObj } from 'tslog'
+import { ILogger } from './logger.interface'
 
-export class LoggerService {
-  private readonly logger: Logger<ILogObj> = new Logger()
+export class LoggerService implements ILogger {
+  readonly logger: Logger<ILogObj> = new Logger()
 
   log(...args: unknown[]) {
     this.logger.info(...args)

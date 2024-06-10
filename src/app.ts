@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import { injectable, inject } from 'inversify'
+import { json } from 'body-parser'
 import { Server } from 'http'
 import { UserController } from './users/users.controller'
 import { ExceptionFilter } from './errors/exception.filter'
@@ -23,6 +24,7 @@ export class App {
 
       this.app.use('/users', userController.router)
       this.app.use(exceptionFilter.catch.bind(this))
+      this.app.use(json())
     })
   }
 }

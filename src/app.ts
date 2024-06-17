@@ -1,6 +1,6 @@
 import express, { Express } from 'express'
 import { injectable, inject } from 'inversify'
-import { json } from 'body-parser'
+import { json, urlencoded } from 'body-parser'
 import { Server } from 'http'
 import { UserController } from './users/users.controller'
 import { ExceptionFilter } from './errors/exception.filter'
@@ -22,9 +22,11 @@ export class App {
     this.server = this.app.listen(this.port, () => {
       logger.log(`running on http://localhost:${this.port}`)
 
+      this.app.use(urlencoded({ extended: false }))
+      this.app.use(json())
+
       this.app.use('/users', userController.router)
       this.app.use(exceptionFilter.catch.bind(this))
-      this.app.use(json())
     })
   }
 }

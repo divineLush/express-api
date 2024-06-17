@@ -1,7 +1,6 @@
 import { injectable, inject } from 'inversify'
 import { NextFunction, Request, Response } from "express";
 import { BaseController } from "../common/base.controller";
-import { HTTPError } from "../errors/http-error.class";
 import { ILogger } from "../logger/logger.interface";
 import { TYPES } from '../types';
 import 'reflect-metadata'
@@ -11,6 +10,8 @@ import { UserRegisterDto } from './dto/user.register.dto';
 import { User } from './user.entity';
 import { UserService } from './users.service';
 import { IUserService } from './users.service.interface';
+import { ValidateMiddleware } from '../common/validate.middleware';
+import { ClassConstructor } from 'class-transformer';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
@@ -22,7 +23,7 @@ export class UserController extends BaseController implements IUserController {
 
     this.bindRoutes([
       { path: '/login', method: 'post', func: this.login },
-      { path: '/register', method: 'post', func: this.register }
+      { path: '/register', method: 'post', func: this.register, middlewares: new ValidateMiddleware(UserRegisterDto as ClassConstructor<object>) }
     ])
   }
 

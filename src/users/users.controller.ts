@@ -9,10 +9,15 @@ import { IUserController } from './users.controller.interface';
 import { UserLoginDto } from './dto/user.login.dto';
 import { UserRegisterDto } from './dto/user.register.dto';
 import { User } from './user.entity';
+import { UserService } from './users.service';
+import { IUserService } from './users.service.interface';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
-  constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+  constructor(
+    @inject(TYPES.ILogger) private loggerService: ILogger,
+    @inject(TYPES.UserService) private userService: IUserService,
+  ) {
     super(loggerService)
 
     this.bindRoutes([
@@ -23,14 +28,24 @@ export class UserController extends BaseController implements IUserController {
 
   login(req: Request<unknown, unknown, UserLoginDto>, res: Response, next: NextFunction) {
     console.log(req.body)
+
     this.ok(res, 'login')
   }
 
   async register(req: Request<unknown, unknown, UserRegisterDto>, res: Response, next: NextFunction) {
     const { email, name, password } = req.body
-    const user = new User(email, name)
-    await user.setPassword(password)
-    this.ok(res, 'register')
-    // next(new HTTPError(401, 'auth error', 'register'))
+    const userDto = {
+      email,
+      name,
+      password
+    } as UserRegisterDto;
+
+    const user = await this.userService.createUser(userDto)
+
+    if (!user) {
+      next(new HTTPError(401, 'auth error', 'register'))
+    }
+
+    this.ok(res, user)
   }
 }

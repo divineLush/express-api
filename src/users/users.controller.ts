@@ -26,10 +26,10 @@ export class UserController extends BaseController implements IUserController {
     this.ok(res, 'login')
   }
 
-  register(req: Request<unknown, unknown, UserRegisterDto>, res: Response, next: NextFunction) {
+  async register(req: Request<unknown, unknown, UserRegisterDto>, res: Response, next: NextFunction) {
     const { email, name, password } = req.body
     const user = new User(email, name)
-    user.setPassword(password)
+    await user.setPassword(password)
     this.ok(res, 'register')
     // next(new HTTPError(401, 'auth error', 'register'))
   }

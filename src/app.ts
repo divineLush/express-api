@@ -7,6 +7,7 @@ import { ExceptionFilter } from './errors/exception.filter'
 import { ILogger } from './logger/logger.interface'
 import { TYPES } from './types'
 import 'reflect-metadata'
+import { ConfigService } from './config/config.service'
 
 @injectable()
 export class App {
@@ -17,7 +18,8 @@ export class App {
   constructor(
     @inject(TYPES.ILogger) private logger: ILogger,
     @inject(TYPES.UserController) private userController: UserController,
-    @inject(TYPES.ExceptionFilter) private exceptionFilter: ExceptionFilter
+    @inject(TYPES.ExceptionFilter) private exceptionFilter: ExceptionFilter,
+    @inject(TYPES.ConfigService) private configService: ConfigService
   ) {
     this.server = this.app.listen(this.port, () => {
       logger.log(`running on http://localhost:${this.port}`)

@@ -12,6 +12,7 @@ import { UserService } from './users.service';
 import { IUserService } from './users.service.interface';
 import { ValidateMiddleware } from '../common/validate.middleware';
 import { ClassConstructor } from 'class-transformer';
+import { HTTPError } from '../errors/http-error.class';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
